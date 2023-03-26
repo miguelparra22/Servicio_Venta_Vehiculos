@@ -13,18 +13,15 @@ public interface VehicleDao {
 
     void registrar(Vehicle vehicle);
 
-    Vehicle getVehicleShipper();
+    Vehicle getVehicleChep();
 
     Vehicle getVehicleOlder();
 
     Vehicle getVehiclePotency();
 
-    List<Vehicle> getVehicleIdYear(Vehicle vehicle);
+    List<Vehicle[]> getVehicleIdYear(Vehicle vehicle);
 
     List<Vehicle> orderYear();
-
-
-    List<Vehicle> infoVehicleCriteria2(Vehicle vehicle);
 
 
     void decreasePrice(double threshold);

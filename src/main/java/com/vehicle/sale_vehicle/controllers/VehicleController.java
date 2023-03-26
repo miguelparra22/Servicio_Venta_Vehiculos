@@ -41,7 +41,7 @@ public class VehicleController {
 
     @RequestMapping(value = "vehicles/info/vehicleChipper", method = RequestMethod.GET)
     public Vehicle infoMostShipperVehicle(Vehicle vehicle){
-        return  vehicleDao.getVehicleShipper();
+        return  vehicleDao.getVehicleChep();
     }
 
 
@@ -56,7 +56,7 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "vehicles/infoModelYear")
-    public List<Vehicle> infoVehicle(@RequestBody Vehicle vehicle){
+    public List<Vehicle[]> infoVehicle(@RequestBody Vehicle vehicle){
 
         return vehicleDao.getVehicleIdYear(vehicle);
     }
