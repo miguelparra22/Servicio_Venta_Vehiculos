@@ -4,6 +4,9 @@ import com.vehicle.sale_vehicle.models.Vehicle;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -44,20 +47,37 @@ public class VehicleDaoImp  implements  VehicleDao{
 
     @Override
     public Vehicle getVehicleShipper() {
-        TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE value = (SELECT MIN(value) FROM Vehicle)", Vehicle.class);
-        return query.getSingleResult();
+       // TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE value = (SELECT MIN(value) FROM Vehicle)", Vehicle.class);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Vehicle> cq = cb.createQuery(Vehicle.class);
+        Root<Vehicle> vehiculoRoot = cq.from(Vehicle.class);
+        cq.orderBy(cb.desc(vehiculoRoot.get("value")));
+        List<Vehicle> vehicles = entityManager.createQuery(cq).getResultList();
+        return vehicles.get(0);
     }
 
     @Override
-    public List<Vehicle> getVehicleOlder() {
-        TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE year = (SELECT MIN(year) FROM Vehicle)", Vehicle.class);
-        return query.getResultList();
+    public Vehicle getVehicleOlder() {
+        //TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE year = (SELECT MIN(year) FROM Vehicle)", Vehicle.class);
+        //return query.getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Vehicle> cq = cb.createQuery(Vehicle.class);
+        Root<Vehicle> vehiculoRoot = cq.from(Vehicle.class);
+        cq.orderBy(cb.asc(vehiculoRoot.get("year")));
+        List<Vehicle> vehicles = entityManager.createQuery(cq).getResultList();
+        return vehicles.get(0);
     }
 
     @Override
-    public List<Vehicle> getVehiclePotency() {
-        TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE potency = (SELECT MAX(potency) FROM Vehicle)", Vehicle.class);
-        return query.getResultList();
+    public Vehicle getVehiclePotency() {
+        //TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE potency = (SELECT MAX(potency) FROM Vehicle)", Vehicle.class);
+        //return query.getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Vehicle> cq = cb.createQuery(Vehicle.class);
+        Root<Vehicle> vehiculoRoot = cq.from(Vehicle.class);
+        cq.orderBy(cb.asc(vehiculoRoot.get("year")));
+        List<Vehicle> vehicles = entityManager.createQuery(cq).getResultList();
+        return vehicles.get(0);
     }
 
     @Override
@@ -74,6 +94,38 @@ public class VehicleDaoImp  implements  VehicleDao{
         List<Vehicle>  id = result;
         return id;
 
+    }
+
+    @Override
+    public List<Vehicle> orderYear() {
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Vehicle> cq = cb.createQuery(Vehicle.class);
+        Root<Vehicle> vehiculoRoot = cq.from(Vehicle.class);
+        cq.orderBy(cb.desc(vehiculoRoot.get("year")));
+
+        return entityManager.createQuery(cq).getResultList();
+    }
+
+    @Override
+    public List<Vehicle> infoVehicleCriteria2(Vehicle vehicle) {
+
+        TypedQuery<Vehicle> query = entityManager.createQuery("FROM Vehicle WHERE year = (SELECT MIN(year) FROM Vehicle)", Vehicle.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public void decreasePrice(double threshold) {
+        //Trae la lista
+        List<Vehicle> vehicles = getVehicles();
+     for (Vehicle vehicle : vehicles) {
+      if (vehicle.getValue() >= threshold) {
+       long newPrice = (long) (vehicle.getValue()-vehicle.getValue() * 0.10); // Reducir el precio en un 10%
+           vehicle.setValue(newPrice);
+           entityManager.merge(vehicle);
+
+      }
+     }
     }
 
 

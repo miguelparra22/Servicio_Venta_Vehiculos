@@ -3,6 +3,7 @@ package com.vehicle.sale_vehicle.controllers;
 
 import com.vehicle.sale_vehicle.dao.VehicleDao;
 import com.vehicle.sale_vehicle.models.Vehicle;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,12 +46,12 @@ public class VehicleController {
 
 
     @RequestMapping(value = "vehicles/info/vehicleOlder", method = RequestMethod.GET)
-    public List<Vehicle> infoVehicleOlder(Vehicle vehicle){
+    public Vehicle infoVehicleOlder(Vehicle vehicle){
         return vehicleDao.getVehicleOlder();
     }
 
     @RequestMapping(value = "vehicles/info/vehicleMostPotency", method = RequestMethod.GET)
-    public List<Vehicle> infoVehicleOPotency(Vehicle vehicle){
+    public Vehicle infoVehicleOPotency(Vehicle vehicle){
         return vehicleDao.getVehiclePotency();
     }
 
@@ -60,5 +61,16 @@ public class VehicleController {
         return vehicleDao.getVehicleIdYear(vehicle);
     }
 
+    @RequestMapping(value = "vehicles/OrderYear", method = RequestMethod.GET)
+    public List<Vehicle> orderYear(){
+       return  vehicleDao.orderYear();
+    }
+
+
+    @RequestMapping(value = "vehicles/decreasePrice/{threshold}", method = RequestMethod.PUT)
+    public String decreasePrice(@PathVariable double threshold) {
+         vehicleDao.decreasePrice(threshold);
+        return "Precio disminuido en un 10% para vehículos con valor mayor a " + threshold;
+ }
 
 }

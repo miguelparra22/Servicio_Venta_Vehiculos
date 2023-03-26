@@ -15,9 +15,17 @@ public interface VehicleDao {
 
     Vehicle getVehicleShipper();
 
-    List<Vehicle> getVehicleOlder();
+    Vehicle getVehicleOlder();
 
-    List<Vehicle> getVehiclePotency();
+    Vehicle getVehiclePotency();
 
     List<Vehicle> getVehicleIdYear(Vehicle vehicle);
+
+    List<Vehicle> orderYear();
+
+
+    List<Vehicle> infoVehicleCriteria2(Vehicle vehicle);
+
+
+    void decreasePrice(double threshold);
 }
