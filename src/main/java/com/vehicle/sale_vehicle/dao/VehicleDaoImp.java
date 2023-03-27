@@ -107,7 +107,7 @@ public class VehicleDaoImp  implements  VehicleDao{
         // caso seleccionamos la tabla con .from
         Root<Vehicle> vehiculoRoot = cq.from(Vehicle.class);
         //Organizamos el rsultado por la potencia del vehiculo.
-        cq.orderBy(cb.asc(vehiculoRoot.get("potency")));
+        cq.orderBy(cb.desc(vehiculoRoot.get("potency")));
         //Declaramos una lista del objetos y la igualamos al resultado
         List<Vehicle> vehicles = entityManager.createQuery(cq).getResultList();
         //Enviamos el primer valor
